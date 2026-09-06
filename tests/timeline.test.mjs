@@ -26,7 +26,7 @@ for(const scale of [12,17]){
     for(let frame=editedFrame(423);frame<=editedFrame(475);frame++)assert.ok(frames.has(frame));
   });
 }
-test('the full-house final frame belongs to the exterior chapter',()=>assert.equal(chapterAtFrame(LAST_FRAME),4));
+test('the full-house final frame belongs to the exterior chapter',()=>assert.equal(chapterAtFrame(LAST_FRAME),14));
 test('both trims exclude only the intended source frames and start scrolling immediately',()=>{
   assert.equal(SOURCE_FRAMES.length,829);
   assert.equal(SOURCE_FRAMES[0],62);

@@ -1,25 +1,38 @@
 import { FrameStore } from './frame-store.js';
-import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=trim-1';
+import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=pauses-1';
 
 const $ = id => document.getElementById(id);
 const canvas = $('film');
 const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const timeline = createTimeline(matchMedia('(pointer: coarse)').matches ? 12 : 17);
-const chapters = [...document.querySelectorAll('[data-chapter]')];
+const chapterNav = document.querySelector('.chapter-nav');
+const chapters = CHAPTERS.map((chapter, index) => {
+  const button = document.createElement('button');
+  button.dataset.chapter = String(index);
+  button.setAttribute('aria-label', `${index + 1}. ${chapter.label}`);
+  const dot = document.createElement('span');
+  dot.className = 'chapter-dot';
+  dot.setAttribute('aria-hidden', 'true');
+  const label = document.createElement('span');
+  label.textContent = chapter.label;
+  button.append(dot, label);
+  return button;
+});
+chapterNav.replaceChildren(...chapters);
 const debug = { ready: false, frame: 0, target: 0, drawCount: 0, drawMilliseconds: [], stalls: 0, errors: [] };
 window.__walkthroughDebug = debug;
 let store, manifest, ready = false, current = 0, painted = -1, target = 0;
 let raf = 0, previousTime = 0, lastChapter = -1, caption = '', resizing = true, controller;
-let alternate = false, playback = null, touch = null, wheelLast = 0, wheelDistance = 0, wheelUsed = false;
+let alternate = true, playback = null, touch = null, wheelLast = 0, wheelDistance = 0, wheelUsed = false;
 
 function modeLabels() {
   debug.alternate = alternate;
   debug.playing = Boolean(playback);
-  const instruction = playback ? 'Playing · stops at next scene' : 'Swipe up to play the next scene';
+  const instruction = playback ? 'Playing · stops at next viewpoint' : 'Swipe up to the next viewpoint';
   $('mode-help').textContent = alternate ? instruction : 'Turn your phone sideways for a wider view.';
   $('scroll-cue').firstElementChild.textContent = alternate
-    ? (playback ? 'Playing scene' : 'Swipe to play')
+    ? (playback ? 'Playing to next stop' : 'Swipe to next stop')
     : (painted >= LAST_FRAME - 1 ? 'You have arrived' : 'Scroll to explore');
 }
 
@@ -44,7 +57,7 @@ function setAlternate(enabled) {
   wheelUsed = false;
   wheelLast = 0;
   document.body.classList.toggle('alternate', enabled);
-  $('alternate-play').setAttribute('aria-checked', String(enabled));
+  $('alternate-play').setAttribute('aria-checked', String(!enabled));
   window.scrollTo({ top: scrollAtFrame(current, timeline), behavior: 'instant' });
   previousTime = 0;
   modeLabels();
@@ -91,7 +104,10 @@ function updateLabels(frame) {
   const chapter = chapterAtFrame(frame);
   if (chapter !== lastChapter) {
     chapters.forEach((button, index) => index === chapter ? button.setAttribute('aria-current', 'step') : button.removeAttribute('aria-current'));
-    $('scene-number').textContent = `0${chapter + 1} / 05`;
+    $('scene-number').textContent = `${String(chapter + 1).padStart(2, '0')} / ${CHAPTERS.length}`;
+    // Scroll only the navigation strip; never move the document or camera here.
+    const active = chapters[chapter];
+    chapterNav.scrollTo({ left: active.offsetLeft - (chapterNav.clientWidth - active.offsetWidth) / 2, behavior: 'instant' });
     lastChapter = chapter;
   }
   const point = viewpointAtFrame(frame);

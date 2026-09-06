@@ -12,6 +12,7 @@ const fs = require('node:fs');
     page.on('request',r=>{if(r.url().includes('/media/'))assetRequests++;});
     await page.goto(process.env.TEST_URL || 'http://127.0.0.1:4173/Vividdesigns-demo/');
     await page.waitForFunction(()=>window.__walkthroughDebug?.ready,{},{timeout:120000});
+    await page.locator('#alternate-play').click();
     await page.waitForTimeout(300);
     const requestsWhenReady=assetRequests;
     await page.screenshot({path:`test-results/${mobile?'mobile':'desktop'}-arrival.png`});

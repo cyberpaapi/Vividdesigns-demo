@@ -9,37 +9,32 @@ export function editedFrame(source) {
   if (source < 277) return 208;
   return source - 68;
 }
-// Boundaries of the four stitched scenes, not the smaller scroll viewpoints.
-// Scene one stops on its own last retained frame, never on scene two's first.
-export const PART_BOUNDARIES = [0, editedFrame(270), editedFrame(480), editedFrame(666), LAST_FRAME];
+// Navigation and one-swipe playback share the camera's approved pause points.
 export function nextPartBoundary(frame, direction = 1) {
   return direction > 0
     ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
     : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
 }
 export const VIEWPOINTS = [
-  { frame: 62, label: 'The arrival', dwell: 0 },
-  { frame: 121, label: 'The entrance', dwell: 170 },
-  { frame: 152, label: 'A view above', dwell: 140 },
-  { frame: 230, label: 'The chandelier', dwell: 140 },
-  { frame: 276, label: 'The living room', dwell: 190 },
-  { frame: 309, label: 'The living room', dwell: 160 },
-  { frame: 340, label: 'The kitchen', dwell: 240 },
-  { frame: 370, label: 'The wine cellar', dwell: 300 },
-  { frame: 423, label: 'A door unfolds', dwell: 190 },
-  { frame: 475, label: 'Beyond the kitchen', dwell: 260 },
-  { frame: 541, label: 'Around the kitchen', dwell: 240 },
-  { frame: 572, label: 'The return hall', dwell: 150 },
-  { frame: 665, label: 'The staircase', dwell: 190 },
-  { frame: 711, label: 'The landing', dwell: 180 },
-  { frame: 804, label: 'The office', dwell: 320 },
-  { frame: 896, label: 'The whole picture', dwell: 450 },
+  { frame: 62, label: 'The arrival', nav: 'Arrival', dwell: 0 },
+  { frame: 121, label: 'The entrance', nav: 'Entrance', dwell: 170 },
+  { frame: 152, label: 'A view above', nav: 'Above', dwell: 140 },
+  { frame: 230, label: 'The chandelier', nav: 'Chandelier', dwell: 140 },
+  { frame: 276, label: 'The foyer', nav: 'Foyer', dwell: 190 },
+  { frame: 309, label: 'The living room', nav: 'Living', dwell: 160 },
+  { frame: 340, label: 'The kitchen', nav: 'Kitchen', dwell: 240 },
+  { frame: 370, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
+  // Do not split at the closed cabinet: keep approach and door opening together.
+  { frame: 475, label: 'Beyond the kitchen', nav: 'Door reveal', dwell: 260 },
+  { frame: 541, label: 'Around the kitchen', nav: 'Kitchen loop', dwell: 240 },
+  { frame: 572, label: 'The return hall', nav: 'Hall', dwell: 150 },
+  { frame: 665, label: 'The staircase', nav: 'Stairs', dwell: 190 },
+  { frame: 711, label: 'The landing', nav: 'Landing', dwell: 180 },
+  { frame: 804, label: 'The office', nav: 'Office', dwell: 320 },
+  { frame: 896, label: 'The whole picture', nav: 'Exterior', dwell: 450 },
 ].map(point => ({ ...point, frame: editedFrame(point.frame) }));
-export const CHAPTERS = [
-  { frame: 0, label: 'Arrival' }, { frame: 276, label: 'Living' },
-  { frame: 340, label: 'Kitchen' }, { frame: 711, label: 'Office' },
-  { frame: 896, label: 'Exterior' },
-].map(point => ({ ...point, frame: editedFrame(point.frame) }));
+export const CHAPTERS = VIEWPOINTS.map(point => ({ frame: point.frame, label: point.nav }));
+export const PART_BOUNDARIES = VIEWPOINTS.map(point => point.frame);
 
 export function createTimeline(pixelsPerFrame = 17) {
   const segments = [];

@@ -9,13 +9,17 @@ scene two. The source packets remain unchanged so existing browser caches work.
 Both playback modes use the same edited frame map. Wheel, touch,
 trackpad, keyboard, and the accessible timeline all control the same position.
 Scrolling backward reverses the walkthrough. There is no third-party runtime or
-video seeking in the playback path. Default scroll mode does not intercept gestures.
+video seeking in the playback path. Free-scroll mode does not intercept gestures.
 
-The top-right Alternate play switch enables one-gesture playback. Swipe up or
-scroll down to play to the next edited scene boundary (frames 208, 412, 598, 828)
-at 30 frames per second. Swipe down to reverse to the previous boundary. Inputs
+One-gesture playback is the default. The top-right Scroll mode switch enables
+free scrolling when turned on and returns to one-gesture playback when turned off.
+In the default mode, swipe up or
+scroll down to play to the next camera pause at 30 frames per second. All 15
+viewpoints (including arrival and final exterior) are sections in the navigation.
+The closed kitchen-cabinet stop is excluded, keeping approach and door opening
+together. Swipe down to reverse to the previous pause. Inputs
 during playback are consumed, not queued. The arrow buttons and keyboard also work.
-Switching off stops playback and restores natural scrolling at the current position.
+Enabling Scroll mode stops playback and restores natural scrolling at the current position.
 Playback pauses while the page is hidden. This mode has no extra media downloads.
 
 ## Playback
@@ -28,7 +32,7 @@ Playback pauses while the page is hidden. This mode has no extra media downloads
   staircase, landing, office and final exterior retain deliberate scroll plateaus.
 - The complete source framing is fitted to the display; the final house and garages are not cropped.
 - Native scrolling is preserved. A short 55ms response filter softens discrete mouse-wheel input;
-  reduced-motion preferences bypass that filter. Alternate play is opt-in timed playback.
+  reduced-motion preferences bypass that filter. Default viewpoint playback starts only after an explicit gesture.
 
 Run `npm run dev` for a local preview, `npm test` for timeline checks, and `npm run build`
 to validate frame packs and produce `dist/`. No dependency installation is needed.
