@@ -4,8 +4,15 @@ A static, natural-scroll architectural walkthrough, published with GitHub Pages.
 
 The approved 29.9-second film is represented by 897 WebP frames. Wheel, touch,
 trackpad, keyboard, and the accessible timeline all control the same position.
-Scrolling backward reverses the walkthrough. There is no autoplay, wheel-event
-interception, third-party runtime, or video seeking in the playback path.
+Scrolling backward reverses the walkthrough. There is no third-party runtime or
+video seeking in the playback path. Default scroll mode does not intercept gestures.
+
+The top-right Alternate play switch enables one-gesture playback. Swipe up or
+scroll down to play to the next original scene boundary (frames 277, 480, 666, 896)
+at 30 frames per second. Swipe down to reverse to the previous boundary. Inputs
+during playback are consumed, not queued. The arrow buttons and keyboard also work.
+Switching off stops playback and restores natural scrolling at the current position.
+Playback pauses while the page is hidden. This mode has no extra media downloads.
 
 ## Playback
 
@@ -17,7 +24,7 @@ interception, third-party runtime, or video seeking in the playback path.
   staircase, landing, office and final exterior retain deliberate scroll plateaus.
 - The complete source framing is fitted to the display; the final house and garages are not cropped.
 - Native scrolling is preserved. A short 55ms response filter softens discrete mouse-wheel input;
-  reduced-motion preferences bypass that filter. There is no timed scene playback.
+  reduced-motion preferences bypass that filter. Alternate play is opt-in timed playback.
 
 Run `npm run dev` for a local preview, `npm test` for timeline checks, and `npm run build`
 to validate frame packs and produce `dist/`. No dependency installation is needed.

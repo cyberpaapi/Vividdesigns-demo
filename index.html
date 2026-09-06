@@ -15,7 +15,7 @@
   <div class="film-shell">
     <header class="masthead">
       <a class="brand" href="#" aria-label="Vivid Designs — return to the beginning"><span class="brand-symbol" aria-hidden="true">V</span><span>VIVID<span class="brand-sub">DESIGNS</span></span></a>
-      <div class="project-id"><span>MASHINI</span><span class="project-kind">PRIVATE RESIDENCE</span></div>
+      <div class="project-id"><span>MASHINI</span><button id="alternate-play" class="mode-toggle" role="switch" aria-checked="false" aria-describedby="mode-help" disabled><span>Alternate play</span><span class="switch-track" aria-hidden="true"></span></button></div>
     </header>
     <main class="stage" id="stage" aria-label="Interactive architectural walkthrough">
       <img class="poster" src="./media/poster.webp" width="1920" height="1080" alt="The sunlit facade of Mashini, with its landscaped lawn and entrance." fetchpriority="high">
@@ -27,7 +27,7 @@
         <p id="load-copy">Preparing your walkthrough <span id="load-percent">0%</span></p>
         <button id="retry" class="text-button" hidden>Try again</button>
       </div>
-      <div class="orientation-hint">Turn your phone sideways for a wider view.</div>
+      <div class="orientation-hint" id="mode-help">Turn your phone sideways for a wider view.</div>
     </main>
     <footer class="tour-footer" id="tour-controls" tabindex="-1">
       <div class="scene-caption"><span class="eyebrow" id="scene-number">01 / 05</span><h2 id="scene-name">The arrival</h2></div>

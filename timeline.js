@@ -1,5 +1,12 @@
 // The final film is 897 frames at 30 fps. Stops follow the approved camera route.
 export const LAST_FRAME = 896;
+// Boundaries of the four stitched scenes, not the smaller scroll viewpoints.
+export const PART_BOUNDARIES = [0, 277, 480, 666, LAST_FRAME];
+export function nextPartBoundary(frame, direction = 1) {
+  return direction > 0
+    ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
+    : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
+}
 export const VIEWPOINTS = [
   { frame: 0, label: 'The arrival', dwell: 150 },
   { frame: 121, label: 'The entrance', dwell: 170 },
