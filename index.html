@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111311">
+  <meta name="description" content="Explore Mashini, a private residence. A cinematic architectural walkthrough by Vivid Designs, guided by your scroll.">
+  <title>Mashini — Vivid Designs</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="./media/poster.webp" fetchpriority="high">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="loading">
+  <a class="skip-link" href="#tour-controls">Skip to walkthrough controls</a>
+  <div class="film-shell">
+    <header class="masthead">
+      <a class="brand" href="#" aria-label="Vivid Designs — return to the beginning"><span class="brand-symbol" aria-hidden="true">V</span><span>VIVID<span class="brand-sub">DESIGNS</span></span></a>
+      <div class="project-id"><span>MASHINI</span><span class="project-kind">PRIVATE RESIDENCE</span></div>
+    </header>
+    <main class="stage" id="stage" aria-label="Interactive architectural walkthrough">
+      <img class="poster" src="./media/poster.webp" width="1920" height="1080" alt="The sunlit facade of Mashini, with its landscaped lawn and entrance." fetchpriority="high">
+      <canvas id="film" aria-label="View of the house controlled by scrolling" role="img"></canvas>
+      <div class="load-panel" id="load-panel" role="status" aria-live="polite">
+        <span class="eyebrow">WELCOME TO MASHINI</span>
+        <h1 id="load-title">A home, at your pace.</h1>
+        <div class="load-track" role="progressbar" aria-label="Loading walkthrough" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="load-progress"><span id="load-fill"></span></div>
+        <p id="load-copy">Preparing your walkthrough <span id="load-percent">0%</span></p>
+        <button id="retry" class="text-button" hidden>Try again</button>
+      </div>
+      <div class="orientation-hint">Turn your phone sideways for a wider view.</div>
+    </main>
+    <footer class="tour-footer" id="tour-controls" tabindex="-1">
+      <div class="scene-caption"><span class="eyebrow" id="scene-number">01 / 05</span><h2 id="scene-name">The arrival</h2></div>
+      <nav class="chapter-nav" aria-label="Explore the house">
+        <button data-chapter="0" aria-current="step"><span class="chapter-dot"></span><span>Arrival</span></button>
+        <button data-chapter="1"><span class="chapter-dot"></span><span>Living</span></button>
+        <button data-chapter="2"><span class="chapter-dot"></span><span>Kitchen</span></button>
+        <button data-chapter="3"><span class="chapter-dot"></span><span>Office</span></button>
+        <button data-chapter="4"><span class="chapter-dot"></span><span>Exterior</span></button>
+      </nav>
+      <div class="scroll-cue" id="scroll-cue"><span>Scroll to explore</span><span aria-hidden="true">↓</span></div>
+      <div class="step-controls"><button id="previous" aria-label="Previous viewpoint" title="Previous viewpoint">←</button><button id="next" aria-label="Next viewpoint" title="Next viewpoint">→</button></div>
+      <label class="sr-only" for="seek">Walkthrough position</label><input id="seek" type="range" min="0" max="1000" value="0" aria-valuetext="Arrival, beginning of walkthrough">
+    </footer>
+    <div class="tour-progress" aria-hidden="true"><span id="tour-progress-fill"></span></div>
+  </div>
+  <div id="scroll-space" aria-hidden="true"></div>
+  <noscript><div class="noscript">Please enable JavaScript to explore the house.</div></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
