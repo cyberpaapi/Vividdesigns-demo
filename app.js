@@ -1,5 +1,5 @@
 import { FrameStore } from './frame-store.js';
-import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=pauses-1';
+import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=groups-1';
 
 const $ = id => document.getElementById(id);
 const canvas = $('film');
@@ -166,7 +166,7 @@ function goToFrame(frame) {
 function stepViewpoint(direction) {
   if (alternate) { playPart(direction); return; }
   const source = frameAtScroll(scrollY, timeline);
-  const point = direction > 0 ? VIEWPOINTS.find(p => p.frame > source + 1) : [...VIEWPOINTS].reverse().find(p => p.frame < source - 1);
+  const point = direction > 0 ? CHAPTERS.find(p => p.frame > source + 1) : [...CHAPTERS].reverse().find(p => p.frame < source - 1);
   goToFrame(point?.frame ?? (direction > 0 ? LAST_FRAME : 0));
 }
 

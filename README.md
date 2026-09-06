@@ -14,8 +14,11 @@ video seeking in the playback path. Free-scroll mode does not intercept gestures
 One-gesture playback is the default. The top-right Scroll mode switch enables
 free scrolling when turned on and returns to one-gesture playback when turned off.
 In the default mode, swipe up or
-scroll down to play to the next camera pause at 30 frames per second. All 15
-viewpoints (including arrival and final exterior) are sections in the navigation.
+scroll down to play the next section at 30 frames per second. Seven sections group
+the viewpoints: Arrival; Entrance; Above / Chandelier / Foyer; Living / Kitchen /
+Wine cellar / Door reveal; Kitchen loop / Hall / Stairs; Landing / Office; Exterior.
+Each group plays continuously to its last pause; intermediate views remain in the
+film without requiring another swipe or extra scroll dwell.
 The closed kitchen-cabinet stop is excluded, keeping approach and door opening
 together. Swipe down to reverse to the previous pause. Inputs
 during playback are consumed, not queued. The arrow buttons and keyboard also work.

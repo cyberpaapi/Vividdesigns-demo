@@ -15,6 +15,17 @@ export function nextPartBoundary(frame, direction = 1) {
     ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
     : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
 }
+// Each merged section ends at the last pause in the user's requested group.
+export const CHAPTERS = [
+  { frame: 62, label: 'Arrival' },
+  { frame: 121, label: 'Entrance' },
+  { frame: 276, label: 'Foyer' },
+  { frame: 475, label: 'Living & kitchen' },
+  { frame: 665, label: 'Kitchen to stairs' },
+  { frame: 804, label: 'Landing & office' },
+  { frame: 896, label: 'Exterior' },
+].map(point => ({ ...point, frame: editedFrame(point.frame) }));
+export const PART_BOUNDARIES = CHAPTERS.map(point => point.frame);
 export const VIEWPOINTS = [
   { frame: 62, label: 'The arrival', nav: 'Arrival', dwell: 0 },
   { frame: 121, label: 'The entrance', nav: 'Entrance', dwell: 170 },
@@ -32,9 +43,8 @@ export const VIEWPOINTS = [
   { frame: 711, label: 'The landing', nav: 'Landing', dwell: 180 },
   { frame: 804, label: 'The office', nav: 'Office', dwell: 320 },
   { frame: 896, label: 'The whole picture', nav: 'Exterior', dwell: 450 },
-].map(point => ({ ...point, frame: editedFrame(point.frame) }));
-export const CHAPTERS = VIEWPOINTS.map(point => ({ frame: point.frame, label: point.nav }));
-export const PART_BOUNDARIES = VIEWPOINTS.map(point => point.frame);
+].map(point => ({ ...point, frame: editedFrame(point.frame),
+  dwell: PART_BOUNDARIES.includes(editedFrame(point.frame)) ? point.dwell : 0 }));
 
 export function createTimeline(pixelsPerFrame = 17) {
   const segments = [];
@@ -70,9 +80,9 @@ export function scrollAtFrame(frame, timeline) {
 }
 
 export function chapterAtFrame(frame) {
-  let result = 0;
-  for (let i = 0; i < CHAPTERS.length; i++) if (frame >= CHAPTERS[i].frame - 1) result = i;
-  return result;
+  // Mark the group currently being traversed; its anchor is its final pause.
+  const index = CHAPTERS.findIndex(point => frame <= point.frame);
+  return index < 0 ? CHAPTERS.length - 1 : index;
 }
 
 export function viewpointAtFrame(frame) {
