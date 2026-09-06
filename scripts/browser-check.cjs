@@ -28,7 +28,7 @@ const fs = require('node:fs');
     if(await page.evaluate(()=>window.__walkthroughDebug.frame)!==stationary)throw Error('Camera moved while scrolling was stopped');
     await context.setOffline(true);
     await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
-    await page.waitForFunction(()=>window.__walkthroughDebug.frame===896,{},{timeout:15000});
+    await page.waitForFunction(()=>window.__walkthroughDebug.frame===window.__walkthroughDebug.totalFrames-1,{},{timeout:15000});
     await page.screenshot({path:`test-results/${mobile?'mobile':'desktop'}-exterior.png`});
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.waitForFunction(()=>window.__walkthroughDebug.frame===0,{},{timeout:15000});

@@ -2,13 +2,17 @@
 
 A static, natural-scroll architectural walkthrough, published with GitHub Pages.
 
-The approved 29.9-second film is represented by 897 WebP frames. Wheel, touch,
+The approved 29.9-second film supplies the WebP frames. The current edit uses 829
+frames (27.63 seconds): the opening 62-frame hold and six trailing frames of scene
+one are excluded. The first scene stops on source frame 270, before the cut into
+scene two. The source packets remain unchanged so existing browser caches work.
+Both playback modes use the same edited frame map. Wheel, touch,
 trackpad, keyboard, and the accessible timeline all control the same position.
 Scrolling backward reverses the walkthrough. There is no third-party runtime or
 video seeking in the playback path. Default scroll mode does not intercept gestures.
 
 The top-right Alternate play switch enables one-gesture playback. Swipe up or
-scroll down to play to the next original scene boundary (frames 277, 480, 666, 896)
+scroll down to play to the next edited scene boundary (frames 208, 412, 598, 828)
 at 30 frames per second. Swipe down to reverse to the previous boundary. Inputs
 during playback are consumed, not queued. The arrow buttons and keyboard also work.
 Switching off stops playback and restores natural scrolling at the current position.

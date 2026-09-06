@@ -1,14 +1,24 @@
-// The final film is 897 frames at 30 fps. Stops follow the approved camera route.
-export const LAST_FRAME = 896;
+// Non-destructive edit of the approved 897-frame master: remove the opening
+// hold (0..61) and six trailing frames of scene one (271..276).
+export const SOURCE_FRAMES = Array.from({ length: 897 }, (_, frame) => frame)
+  .filter(frame => frame >= 62 && (frame <= 270 || frame >= 277));
+export const LAST_FRAME = SOURCE_FRAMES.length - 1;
+export function editedFrame(source) {
+  if (source < 62) return 0;
+  if (source <= 270) return source - 62;
+  if (source < 277) return 208;
+  return source - 68;
+}
 // Boundaries of the four stitched scenes, not the smaller scroll viewpoints.
-export const PART_BOUNDARIES = [0, 277, 480, 666, LAST_FRAME];
+// Scene one stops on its own last retained frame, never on scene two's first.
+export const PART_BOUNDARIES = [0, editedFrame(270), editedFrame(480), editedFrame(666), LAST_FRAME];
 export function nextPartBoundary(frame, direction = 1) {
   return direction > 0
     ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
     : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
 }
 export const VIEWPOINTS = [
-  { frame: 0, label: 'The arrival', dwell: 150 },
+  { frame: 62, label: 'The arrival', dwell: 0 },
   { frame: 121, label: 'The entrance', dwell: 170 },
   { frame: 152, label: 'A view above', dwell: 140 },
   { frame: 230, label: 'The chandelier', dwell: 140 },
@@ -24,12 +34,12 @@ export const VIEWPOINTS = [
   { frame: 711, label: 'The landing', dwell: 180 },
   { frame: 804, label: 'The office', dwell: 320 },
   { frame: 896, label: 'The whole picture', dwell: 450 },
-];
+].map(point => ({ ...point, frame: editedFrame(point.frame) }));
 export const CHAPTERS = [
   { frame: 0, label: 'Arrival' }, { frame: 276, label: 'Living' },
   { frame: 340, label: 'Kitchen' }, { frame: 711, label: 'Office' },
   { frame: 896, label: 'Exterior' },
-];
+].map(point => ({ ...point, frame: editedFrame(point.frame) }));
 
 export function createTimeline(pixelsPerFrame = 17) {
   const segments = [];
@@ -37,12 +47,11 @@ export function createTimeline(pixelsPerFrame = 17) {
   for (let i = 0; i < VIEWPOINTS.length; i++) {
     const point = VIEWPOINTS[i];
     // Keep stationary poses as scroll plateaus, not a timed auto-play action.
-    segments.push({ start: position, end: position + point.dwell, from: point.frame, to: point.frame });
+    if (point.dwell > 0) segments.push({ start: position, end: position + point.dwell, from: point.frame, to: point.frame });
     position += point.dwell;
     if (i < VIEWPOINTS.length - 1) {
       const next = VIEWPOINTS[i + 1];
-      // The opening still in the MP4 should not require two seconds of scrolling.
-      const from = i === 0 ? 61 : point.frame;
+      const from = point.frame;
       const distance = (next.frame - from) * pixelsPerFrame;
       segments.push({ start: position, end: position + distance, from, to: next.frame });
       position += distance;

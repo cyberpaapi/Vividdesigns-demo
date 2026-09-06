@@ -1,5 +1,5 @@
 import { FrameStore } from './frame-store.js';
-import { LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js';
+import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('film');
@@ -179,6 +179,12 @@ async function start() {
     const response = await fetch(`${base}/manifest.json`, { signal: controller.signal });
     if (!response.ok) throw new Error('The walkthrough is temporarily unavailable.');
     manifest = await response.json();
+    // Both modes share the same edit; keep source packets unchanged and cached.
+    manifest.map = SOURCE_FRAMES.map(frame => manifest.map[frame]);
+    manifest.frames = SOURCE_FRAMES.length;
+    manifest.duration = SOURCE_FRAMES.length / manifest.fps;
+    debug.totalFrames = manifest.frames;
+    debug.sourceFrame = frame => SOURCE_FRAMES[frame];
     store = new FrameStore(manifest, base, { limit: mobile ? 32 : 26, concurrency: 3, onAvailable: requestTick });
     await store.load(fraction => {
       const percent = Math.min(99, Math.round(fraction * 100));
