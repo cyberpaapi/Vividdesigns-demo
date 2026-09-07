@@ -19,8 +19,10 @@ the viewpoints: Arrival; Entrance; Above / Chandelier / Foyer; Living / Kitchen 
 Wine cellar / Door reveal; Kitchen loop / Hall / Stairs; Landing / Office; Exterior.
 Each group plays continuously to its last pause; intermediate views remain in the
 film without requiring another swipe or extra scroll dwell.
-Entrance, Foyer, and Landing & Office now stop at source frames 112, 252, and 788,
-before the following motion begins. Their following frames belong to the next
+Entrance, Foyer, and Landing & Office now stop at source frames 118, 261, and 797,
+after the incoming camera move has settled and before the next move accelerates.
+Frame-by-frame review restored 6, 9, and 9 frames to these sections respectively.
+Their following frames belong to the next
 section; this boundary correction removes no additional frames from the film.
 The closed kitchen-cabinet stop is excluded, keeping approach and door opening
 together. Swipe down to reverse to the previous pause. Inputs

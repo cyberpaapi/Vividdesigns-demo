@@ -15,23 +15,25 @@ export function nextPartBoundary(frame, direction = 1) {
     ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
     : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
 }
+// Anchors sit inside the settled camera pose, after incoming easing and before
+// the next move accelerates. Source-frame inspection: 118, 261 and 797.
 // Each merged section ends at the last pause in the user's requested group.
 export const CHAPTERS = [
   { frame: 62, label: 'Arrival' },
-  { frame: 112, label: 'Entrance' },
-  { frame: 252, label: 'Foyer' },
+  { frame: 118, label: 'Entrance' },
+  { frame: 261, label: 'Foyer' },
   { frame: 475, label: 'Living & kitchen' },
   { frame: 665, label: 'Kitchen to stairs' },
-  { frame: 788, label: 'Landing & office' },
+  { frame: 797, label: 'Landing & office' },
   { frame: 896, label: 'Exterior' },
 ].map(point => ({ ...point, frame: editedFrame(point.frame) }));
 export const PART_BOUNDARIES = CHAPTERS.map(point => point.frame);
 export const VIEWPOINTS = [
   { frame: 62, label: 'The arrival', nav: 'Arrival', dwell: 0 },
-  { frame: 112, label: 'The entrance', nav: 'Entrance', dwell: 170 },
+  { frame: 118, label: 'The entrance', nav: 'Entrance', dwell: 170 },
   { frame: 152, label: 'A view above', nav: 'Above', dwell: 140 },
   { frame: 230, label: 'The chandelier', nav: 'Chandelier', dwell: 140 },
-  { frame: 252, label: 'The foyer', nav: 'Foyer', dwell: 190 },
+  { frame: 261, label: 'The foyer', nav: 'Foyer', dwell: 190 },
   { frame: 309, label: 'The living room', nav: 'Living', dwell: 160 },
   { frame: 340, label: 'The kitchen', nav: 'Kitchen', dwell: 240 },
   { frame: 370, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
@@ -41,7 +43,7 @@ export const VIEWPOINTS = [
   { frame: 572, label: 'The return hall', nav: 'Hall', dwell: 150 },
   { frame: 665, label: 'The staircase', nav: 'Stairs', dwell: 190 },
   { frame: 711, label: 'The landing', nav: 'Landing', dwell: 180 },
-  { frame: 788, label: 'The office', nav: 'Office', dwell: 320 },
+  { frame: 797, label: 'The office', nav: 'Office', dwell: 320 },
   { frame: 896, label: 'The whole picture', nav: 'Exterior', dwell: 450 },
 ].map(point => ({ ...point, frame: editedFrame(point.frame),
   dwell: PART_BOUNDARIES.includes(editedFrame(point.frame)) ? point.dwell : 0 }));
