@@ -2,7 +2,7 @@ import {initHero} from './hero-player.js';
 const requested=new URLSearchParams(location.search).get('style');
 const style=['experimental','experiential'].includes(requested)?requested:'experimental';
 const experientialModule=style==='experiential'?await import('./experiential.js?v=3'):null;
-const expModule=style==='experimental'?await import('./experimental.js?v=unique-2'):null;
+const expModule=style==='experimental'?await import('./experimental.js?v=cube-2'):null;
 document.body.dataset.style=style;
 document.querySelector(`.review-bar a[data-style="${style}"]`).setAttribute('aria-current','page');
 document.title=`Vivid / ${style} — Virtual experience`;

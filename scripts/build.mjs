@@ -16,6 +16,7 @@ for(const variant of ['hd','mobile']){
 await fs.mkdir('dist',{recursive:true});
 for(const file of files) await fs.copyFile(file,path.join('dist',file));
 await fs.cp('media','dist/media',{recursive:true});
+await fs.copyFile('perspective-cube.js','dist/perspective-cube.js');
 await fs.cp('assets','dist/assets',{recursive:true});
 await fs.cp('vendor','dist/vendor',{recursive:true});
 await fs.writeFile('dist/.nojekyll','');

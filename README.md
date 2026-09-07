@@ -67,6 +67,11 @@ and native fullscreen exit events keep the button state synchronized.
 Run `npm run dev` for a local preview, `npm test` for timeline checks, and `npm run build`
 to validate frame packs and produce `dist/`. No dependency installation is needed.
 
+The Experimental perspective cube supports touch/mouse rotation and tilt, release momentum,
+room presets, and Reset view. Dragging outside the cube preserves page scrolling. Arrow keys
+rotate a focused cube; Home resets it. Reduced motion disables momentum and snap animation.
+`scripts/cube-check.cjs` checks these interactions with Playwright at phone and desktop sizes.
+
 The `main` workflow publishes `dist/` to GitHub Pages. Frame media is stored in this repository,
 so the live site does not depend on Higgsfield or on the laptop being online.
 
