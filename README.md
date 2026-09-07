@@ -1,5 +1,21 @@
 # Mashini — Vivid Designs
 
+The homepage now offers **Experimental** and **Experiential** tabs, both with the
+approved video hero. Experimental contains ten interactive image sections.
+Experiential contains eight sections about VR, AI-assisted design and client
+feedback, including a wireframe living-room model and material sculpture.
+The former standalone walkthrough is retained at `legacy.html`.
+
+The room starts with 3D exploration enabled; Done restores scrolling on its canvas.
+The 3D viewers load near their sections and pause off-screen. Runtime dependencies,
+images and geometry are bundled locally. Warmth / Light / Calm are illustrative
+visual effects; the design choices show prepared examples rather than calling an AI
+service. The chapter labels and bars are hidden in both homepage tabs.
+
+Use `?style=experimental` or `?style=experiential` to open either tab directly.
+`scripts/experiences-check.cjs` checks the built or published site using Playwright;
+set CHECK_BASE to the deployed repository URL and PLAYWRIGHT_PATH if needed.
+
 A static, natural-scroll architectural walkthrough, published with GitHub Pages.
 
 The approved 29.9-second film supplies the WebP frames. The current edit uses 829

@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 const root=process.cwd();
-const files=['index.html','style.css','app.js','frame-store.js','timeline.js','favicon.svg'];
+const files=['index.html','legacy.html','style.css','app.js','frame-store.js','timeline.js','favicon.svg','experience.js','experience.css','hero-player.js','experimental.js','experimental.css','experimental-media.js','experiential.js','experiential.css','clean-preview.css','room-viewer.js','material-play.js'];
 for(const variant of ['hd','mobile']){
   const dir=path.join(root,'media',variant);
   const manifest=JSON.parse(await fs.readFile(path.join(dir,'manifest.json'),'utf8'));
@@ -16,5 +16,7 @@ for(const variant of ['hd','mobile']){
 await fs.mkdir('dist',{recursive:true});
 for(const file of files) await fs.copyFile(file,path.join('dist',file));
 await fs.cp('media','dist/media',{recursive:true});
+await fs.cp('assets','dist/assets',{recursive:true});
+await fs.cp('vendor','dist/vendor',{recursive:true});
 await fs.writeFile('dist/.nojekyll','');
 console.log('Static site validated and built in dist/');
