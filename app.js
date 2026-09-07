@@ -235,6 +235,50 @@ document.addEventListener('visibilitychange', () => {
   requestTick();
 });
 $('alternate-play').addEventListener('click', () => setAlternate(!alternate));
+let expandedFallback = false, fullscreenBusy = false;
+const nativeFullscreen = () => document.fullscreenElement || document.webkitFullscreenElement;
+function updateFullscreen() {
+  const expanded = Boolean(nativeFullscreen() || expandedFallback);
+  document.body.classList.toggle('is-fullscreen', expanded);
+  $('fullscreen-toggle').setAttribute('aria-pressed', String(expanded));
+  $('fullscreen-toggle').setAttribute('aria-label', expanded ? 'Exit fullscreen' : 'Enter fullscreen');
+  $('fullscreen-toggle').title = expanded ? 'Exit fullscreen' : 'Enter fullscreen';
+  $('fullscreen-toggle').querySelector('.fullscreen-label').textContent = expanded ? 'Exit fullscreen' : 'Fullscreen';
+  debug.fullscreen = expanded;
+  debug.fullscreenFallback = expandedFallback;
+  requestAnimationFrame(measure);
+}
+async function toggleFullscreen() {
+  if (fullscreenBusy) return;
+  fullscreenBusy = true;
+  try {
+    if (nativeFullscreen()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) await exit.call(document);
+    } else if (expandedFallback) {
+      expandedFallback = false;
+    } else {
+      const root = document.documentElement;
+      const enter = root.requestFullscreen || root.webkitRequestFullscreen;
+      try {
+        if (!enter) throw new Error('Fullscreen API unavailable');
+        await enter.call(root);
+      } catch {
+        // iPhone and embedded browsers may disallow page fullscreen. Expand the
+        // film within the available viewport while leaving a visible exit control.
+        expandedFallback = true;
+        $('fullscreen-status').textContent = 'Expanded view. Browser fullscreen is not available on this device.';
+      }
+    }
+    updateFullscreen();
+  } finally { fullscreenBusy = false; }
+}
+$('fullscreen-toggle').addEventListener('click', toggleFullscreen);
+document.addEventListener('fullscreenchange', updateFullscreen);
+document.addEventListener('webkitfullscreenchange', updateFullscreen);
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && expandedFallback) { expandedFallback = false; updateFullscreen(); }
+});
 const gestureSurface = document.querySelector('.film-shell');
 const isControl = target => Boolean(target.closest('button,a,input'));
 gestureSurface.addEventListener('touchstart', event => {

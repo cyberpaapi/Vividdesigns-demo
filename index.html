@@ -8,14 +8,14 @@
   <title>Mashini — Vivid Designs</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="./media/poster.webp" fetchpriority="high">
-  <link rel="stylesheet" href="./style.css?v=pauses-1">
+  <link rel="stylesheet" href="./style.css?v=fullscreen-1">
 </head>
 <body class="loading alternate">
   <a class="skip-link" href="#tour-controls">Skip to walkthrough controls</a>
   <div class="film-shell">
     <header class="masthead">
       <a class="brand" href="#" aria-label="Vivid Designs — return to the beginning"><span class="brand-symbol" aria-hidden="true">V</span><span>VIVID<span class="brand-sub">DESIGNS</span></span></a>
-      <div class="project-id"><span>MASHINI</span><button id="alternate-play" class="mode-toggle" role="switch" aria-checked="false" aria-describedby="mode-help" disabled><span>Scroll mode</span><span class="switch-track" aria-hidden="true"></span></button></div>
+      <div class="project-id"><span>MASHINI</span><button id="alternate-play" class="mode-toggle" role="switch" aria-checked="false" aria-describedby="mode-help" disabled><span>Scroll mode</span><span class="switch-track" aria-hidden="true"></span></button><button id="fullscreen-toggle" class="mode-toggle fullscreen-toggle" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></svg><span class="fullscreen-label">Fullscreen</span></button></div>
     </header>
     <main class="stage" id="stage" aria-label="Interactive architectural walkthrough">
       <img class="poster" src="./media/poster.webp" width="1920" height="1080" alt="The sunlit facade of Mashini, with its landscaped lawn and entrance." fetchpriority="high">
@@ -41,7 +41,8 @@
     <div class="tour-progress" aria-hidden="true"><span id="tour-progress-fill"></span></div>
   </div>
   <div id="scroll-space" aria-hidden="true"></div>
+  <p id="fullscreen-status" class="sr-only" role="status" aria-live="polite"></p>
   <noscript><div class="noscript">Please enable JavaScript to explore the house.</div></noscript>
-  <script type="module" src="./app.js?v=groups-1"></script>
+  <script type="module" src="./app.js?v=fullscreen-1"></script>
 </body>
 </html>

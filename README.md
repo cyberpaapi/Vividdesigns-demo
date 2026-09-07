@@ -25,6 +25,12 @@ during playback are consumed, not queued. The arrow buttons and keyboard also wo
 Enabling Scroll mode stops playback and restores natural scrolling at the current position.
 Playback pauses while the page is hidden. This mode has no extra media downloads.
 
+The Fullscreen button beside Scroll mode expands the film and hides the navigation.
+Both playback modes remain available, with a visible exit button. Native browser
+fullscreen is used when supported; restricted browsers use an expanded viewport
+fallback, which cannot hide the browser's own address bar. Escape exits the fallback,
+and native fullscreen exit events keep the button state synchronized.
+
 ## Playback
 
 - Desktop uses 1920 × 1080 images. Smaller or memory-constrained devices use 960 × 540.
