@@ -6,10 +6,24 @@ const base=process.env.CHECK_BASE||'http://127.0.0.1:4180/Vividdesigns-demo/';
  try{for(const config of [{width:390,touch:true},{width:320,touch:true,reduced:true},{width:1440,touch:false}]){
   const context=await browser.newContext({viewport:{width:config.width,height:900},isMobile:config.touch,hasTouch:config.touch,reducedMotion:config.reduced?'reduce':'no-preference'});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base+'?style=experimental&v=cube-2');
+  await page.goto(base+'?style=experimental&v=six-1');
   await page.waitForFunction(()=>window.__heroDebug?.ready);
   await page.getByRole('button',{name:'Explore design'}).click();
   await page.waitForFunction(()=>window.__cubeDebug);
+  const nextTop=await page.locator('#experiment-3').evaluate(e=>e.getBoundingClientRect().top+scrollY);
+  for(let i=0;i<3;i++){
+   const header=page.locator('.exp-room-toggle').nth(i);
+   await header.evaluate(e=>scrollTo({top:e.getBoundingClientRect().top+scrollY-innerHeight*.6,behavior:'instant'}));
+   await page.waitForFunction(i=>document.querySelectorAll('.exp-room')[i].classList.contains('open'),i);
+   await page.waitForTimeout(750);
+   assert.equal(await header.getAttribute('aria-expanded'),'true');
+   assert.equal(await page.locator('.exp-room-copy').nth(i).evaluate(e=>e.inert),false);
+  }
+  assert.equal(await page.locator('.exp-room.open').count(),3);
+  assert(Math.abs(await page.locator('#experiment-3').evaluate(e=>e.getBoundingClientRect().top+scrollY)-nextTop)<2,'expansion must not shift subsequent sections');
+  assert.equal(await page.locator('.cube-face img').count(),6);
+  assert.equal(await page.locator('[data-cube]').count(),6);
+  await page.locator('.cube-face img').evaluateAll(ims=>Promise.all(ims.map(im=>{im.loading='eager';return im.decode()})));
   await page.locator('.cube-stage').evaluate(el=>el.scrollIntoView({block:'center'}));
   await page.waitForTimeout(500);
   const box=await page.locator('.room-cube').boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
@@ -29,6 +43,12 @@ const base=process.env.CHECK_BASE||'http://127.0.0.1:4180/Vividdesigns-demo/';
   await page.locator('[data-cube="1"]').click();await page.waitForTimeout(700);assert.equal(await page.evaluate(()=>__cubeDebug.face),1);
   await page.locator('.room-cube').focus();await page.keyboard.press('ArrowUp');assert.equal(await page.evaluate(()=>__cubeDebug.pitch),7);
   await page.keyboard.press('Home');
+  for(const [face,pitch] of [[4,-90],[5,90]]){
+   await page.locator(`[data-cube="${face}"]`).click();await page.waitForTimeout(700);
+   assert.equal(await page.evaluate(()=>__cubeDebug.face),face);
+   assert.equal(await page.evaluate(()=>__cubeDebug.pitch),pitch);
+  }
+  await page.locator('#cube-reset').click();await page.waitForTimeout(700);
   if(config.touch){await page.locator('.cube-stage').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(700);const sy=await page.evaluate(()=>scrollY),cdp=await context.newCDPSession(page);
    await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:8,y:650}]});
    for(let i=1;i<=8;i++){await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:8,y:650-i*20}]});await page.waitForTimeout(20)}

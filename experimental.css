@@ -38,3 +38,9 @@
 .exp-material h2{font-size:46px}.exp-material .material-arch{height:370px;margin-top:25px}
 .exp-light h2{font-size:48px}.exp-light .light-photo{height:360px}
 }
+
+/* Reserve each reveal's space so expansion never moves the following content. */
+.exp-room-slot{height:440px}.exp-room{overflow-anchor:none}
+.cube-controls{grid-template-columns:repeat(3,1fr)}
+@media(max-width:700px){.exp-room-slot{height:405px}.cube-controls{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){.exp-room,.exp-room-image img,.exp-room-copy{transition:none}}

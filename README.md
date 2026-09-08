@@ -67,8 +67,11 @@ and native fullscreen exit events keep the button state synchronized.
 Run `npm run dev` for a local preview, `npm test` for timeline checks, and `npm run build`
 to validate frame packs and produce `dist/`. No dependency installation is needed.
 
-The Experimental perspective cube supports touch/mouse rotation and tilt, release momentum,
-room presets, and Reset view. Dragging outside the cube preserves page scrolling. Arrow keys
+Gather, Discover, and Retreat expand automatically as their headings enter the viewport.
+Each reveal reserves its expanded height, keeping subsequent sections stable while it opens.
+The Experimental perspective cube has six photographic faces, including bedroom and courtyard
+on its top and bottom. It supports touch/mouse rotation and tilt, release momentum,
+six room presets, and Reset view. Dragging outside the cube preserves page scrolling. Arrow keys
 rotate a focused cube; Home resets it. Reduced motion disables momentum and snap animation.
 `scripts/cube-check.cjs` checks these interactions with Playwright at phone and desktop sizes.
 
