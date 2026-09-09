@@ -37,6 +37,7 @@ export function initHero({standalone=false}={}){
   let locked=scrollY<2,touch=null,wheelLast=0,wheelTotal=0,wheelUsed=false,resize=true,loadingFrame=false;
   let immersive=false,lastLabelKey='',lastProgressFrame=-1;
   const status=document.getElementById('film-status');
+  const fullscreenButton=document.getElementById('film-fullscreen');
   const debug=window.__heroDebug={ready:false,frame:0,playing:false,locked,errors:[],mode};
   const nav=document.getElementById('film-chapters');
   nav.innerHTML=CHAPTERS.map((p,i)=>`<button data-chapter="${i}" aria-label="Go to ${p.label}" title="${p.label}"><span class="chapter-line"></span><span class="chapter-label">${String(i+1).padStart(2,'0')} ${p.label}</span></button>`).join('');
@@ -49,13 +50,14 @@ export function initHero({standalone=false}={}){
       document.getElementById('film-seek').value=Math.round(frame);lastProgressFrame=painted;
     }
     const finished=frame>=LAST_FRAME-1;
-    const key=`${index}:${!!playback}:${mode}:${finished}:${frame>5}:${ready}`;
+    const key=`${index}:${!!playback}:${mode}:${finished}:${frame>5}:${frame<1}:${ready}`;
     if(key===lastLabelKey)return;lastLabelKey=key;
     document.getElementById('film-room').textContent=CHAPTERS[index].label;
     document.getElementById('film-index').textContent=`${String(index+1).padStart(2,'0')} / 07`;
     nav.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===index?'step':'false'));
     document.getElementById('film-instruction').textContent=finished?(standalone?'Swipe down to look back.':'Continue scrolling to discover more'):playback?'Moving to the next viewpoint':mode==='scrub'?'Scroll to move through the home':'One swipe. One new perspective.';
-    document.getElementById('film-next').setAttribute('aria-label',finished?'Continue to the next section':'Play to next viewpoint');
+    document.getElementById('film-next').setAttribute('aria-label',finished?(standalone?'Final viewpoint':'Continue to the next section'):'Play to next viewpoint');
+    if(standalone)document.getElementById('film-next').disabled=finished||!ready;
     document.getElementById('film-prev').disabled=frame<1||!ready;
     hero.classList.toggle('has-moved',frame>5);
     document.getElementById('film-seek').setAttribute('aria-valuetext',CHAPTERS[index].label);
@@ -164,21 +166,21 @@ export function initHero({standalone=false}={}){
   document.getElementById('film-seek').oninput=e=>goTo(Number(e.target.value));
   nav.addEventListener('click',e=>{const button=e.target.closest('button');if(button)goTo(CHAPTERS[Number(button.dataset.chapter)].frame)});
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&immersive){immersive=false;hero.classList.remove('expanded');document.getElementById('film-fullscreen').setAttribute('aria-pressed','false');measure();return;}
+    if(event.key==='Escape'&&immersive){immersive=false;hero.classList.remove('expanded');fullscreenButton?.setAttribute('aria-pressed','false');measure();return;}
     if(isControl(event.target)||!locked||scrollY>2)return;
     if(['ArrowDown','PageDown',' ','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();if(!event.repeat)step(['ArrowUp','PageUp'].includes(event.key)||event.shiftKey?-1:1);}
     if(event.key==='Escape')release();
   });
-  document.getElementById('film-fullscreen').onclick=async()=>{
+  if(fullscreenButton)fullscreenButton.onclick=async()=>{
     try{
       if(document.fullscreenElement)await document.exitFullscreen();
       else if(immersive){immersive=false;hero.classList.remove('expanded');}
       else if(hero.requestFullscreen)await hero.requestFullscreen();
       else{immersive=true;hero.classList.add('expanded');}
     }catch{immersive=!immersive;hero.classList.toggle('expanded',immersive);}
-    document.getElementById('film-fullscreen').setAttribute('aria-pressed',String(!!document.fullscreenElement||immersive));measure();
+    fullscreenButton.setAttribute('aria-pressed',String(!!document.fullscreenElement||immersive));measure();
   };
-  document.addEventListener('fullscreenchange',()=>{document.getElementById('film-fullscreen').setAttribute('aria-pressed',String(!!document.fullscreenElement));measure();});
+  if(fullscreenButton)document.addEventListener('fullscreenchange',()=>{fullscreenButton.setAttribute('aria-pressed',String(!!document.fullscreenElement));measure();});
   document.addEventListener('visibilitychange',()=>{last=0;if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=0;}else request();});
   new ResizeObserver(measure).observe(hero);setLocked(locked);start();
   debug.seek=goTo;debug.step=step;debug.release=release;
