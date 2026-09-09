@@ -14,6 +14,7 @@ for(const variant of ['hd','mobile']){
   console.log(`${variant}: ${manifest.frames} timeline frames, ${manifest.images.length} images, ${(manifest.packs.reduce((s,p)=>s+p.bytes,0)/1e6).toFixed(1)} MB`);
 }
 await fs.mkdir('dist',{recursive:true});
+for(const file of ['walkthrough.html','walkthrough.css','walkthrough.js'])await fs.copyFile(file,path.join('dist',file));
 for(const file of files) await fs.copyFile(file,path.join('dist',file));
 await fs.cp('media','dist/media',{recursive:true});
 await fs.copyFile('perspective-cube.js','dist/perspective-cube.js');

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10130f">
+  <meta name="description" content="Explore the home, one perspective at a time.">
+  <title>Vivid Design Studio · Virtual walkthrough</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./walkthrough.css?v=1">
+</head>
+<body>
+  <main class="film-hero" aria-label="Interactive home walkthrough" tabindex="0">
+    <canvas id="hero-film" aria-label="Home walkthrough. Swipe up to advance to the next view; swipe down to go back."></canvas>
+    <div class="film-poster" aria-hidden="true"></div>
+    <div class="film-tools">
+      <button id="film-fullscreen" type="button" aria-label="Toggle fullscreen" aria-pressed="false" title="Fullscreen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></svg>
+      </button>
+      <button id="film-mode" type="button" aria-pressed="false" hidden>Scroll mode</button>
+    </div>
+    <p id="film-instruction" class="film-hint">One swipe. One new perspective.</p>
+    <div class="film-loading" role="status"><span id="film-status">Preparing your first view…</span><button id="film-retry" type="button" hidden>Retry</button></div>
+    <div hidden aria-hidden="true">
+      <nav id="film-chapters"></nav><span id="film-room"></span><span id="film-index"></span>
+      <div id="film-progress"></div><input id="film-seek" type="range" min="0" value="0">
+      <button id="film-prev" type="button">Previous</button><button id="film-next" type="button" disabled>Next</button>
+    </div>
+  </main>
+  <noscript>Enable JavaScript to use the interactive walkthrough.</noscript>
+  <script type="module" src="./walkthrough.js?v=1"></script>
+</body>
+</html>

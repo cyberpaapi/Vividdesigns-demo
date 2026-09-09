@@ -28,7 +28,7 @@ class StreamingFrames extends FrameStore {
   }
 }
 
-export function initHero(){
+export function initHero({standalone=false}={}){
   const hero=document.querySelector('.film-hero');
   const canvas=document.getElementById('hero-film');
   const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
@@ -54,7 +54,7 @@ export function initHero(){
     document.getElementById('film-room').textContent=CHAPTERS[index].label;
     document.getElementById('film-index').textContent=`${String(index+1).padStart(2,'0')} / 07`;
     nav.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===index?'step':'false'));
-    document.getElementById('film-instruction').textContent=finished?'Continue scrolling to discover more':playback?'Moving to the next viewpoint':mode==='scrub'?'Scroll to move through the home':'One swipe. One new perspective.';
+    document.getElementById('film-instruction').textContent=finished?(standalone?'Swipe down to look back.':'Continue scrolling to discover more'):playback?'Moving to the next viewpoint':mode==='scrub'?'Scroll to move through the home':'One swipe. One new perspective.';
     document.getElementById('film-next').setAttribute('aria-label',finished?'Continue to the next section':'Play to next viewpoint');
     document.getElementById('film-prev').disabled=frame<1||!ready;
     hero.classList.toggle('has-moved',frame>5);
@@ -88,7 +88,7 @@ export function initHero(){
     }else if(!loadingFrame){loadingFrame=true;store.ensure(f).then(()=>{loadingFrame=false;last=0;request();}).catch(fail);}
     if(playback||Math.abs(frame-scrubTarget)>.08&&mode==='scrub'||resize)request();else last=0;
   }
-  function fail(error){debug.errors.push(String(error));status.textContent='Couldn’t load the tour. Tap Retry, or continue below.';document.getElementById('film-retry').hidden=false;hero.classList.remove('film-ready');ready=false;}
+  function fail(error){debug.errors.push(String(error));status.textContent=standalone?'Couldn’t load the tour. Tap Retry.':'Couldn’t load the tour. Tap Retry, or continue below.';document.getElementById('film-retry').hidden=false;hero.classList.remove('film-ready');ready=false;}
   async function start(){
     status.textContent='Preparing your first view…';document.getElementById('film-retry').hidden=true;
     try{
@@ -104,6 +104,7 @@ export function initHero(){
   }
   function setLocked(value){locked=value;hero.classList.toggle('is-locked',value);debug.locked=value;}
   function release(){
+    if(standalone){playback=null;labels();return;}
     playback=null;setLocked(false);labels();
     const after=document.getElementById('after-film');
     window.scrollTo({top:after.offsetTop-parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--review-height')),behavior:reduced.matches?'instant':'smooth'});
