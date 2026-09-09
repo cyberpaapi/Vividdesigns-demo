@@ -1,5 +1,5 @@
 import { FrameStore } from './frame-store.js';
-import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=materials-20260909';
+import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=entrancefix-20260909';
 
 const $ = id => document.getElementById(id);
 const canvas = $('film');
@@ -192,7 +192,7 @@ async function start() {
     const variant = mobile ? 'mobile' : 'hd';
     debug.quality = variant;
     const base = new URL(`./media/${variant}`, location.href).pathname.replace(/\/$/, '');
-    const response = await fetch(`${base}/manifest.json?v=materials-20260909`, { signal: controller.signal });
+    const response = await fetch(`${base}/manifest.json?v=entrancefix-20260909`, { signal: controller.signal });
     if (!response.ok) throw new Error('The walkthrough is temporarily unavailable.');
     manifest = await response.json();
     // Both modes share the same edit; keep source packets unchanged and cached.

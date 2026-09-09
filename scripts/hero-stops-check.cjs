@@ -5,8 +5,8 @@ const base=process.env.CHECK_BASE||'http://127.0.0.1:4180/Vividdesigns-demo/';
  for(const mobile of [true,false]){
   const p=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:900},isMobile:mobile,hasTouch:mobile});
   const errors=[];p.on('pageerror',e=>errors.push(e.message));
-  await p.goto(base+'?style=experimental&v=materials-20260909');await p.waitForFunction(()=>window.__heroDebug?.ready);
-  const boundaries=[0,56,90,129,170,200,275,337,403,440,527,574,661,758];
+  await p.goto(base+'?style=experimental&v=entrancefix-20260909');await p.waitForFunction(()=>window.__heroDebug?.ready);
+  const boundaries=[0,56,90,129,176,206,281,343,409,446,533,580,667,764];
   // Exercise the whole entrance in real time, including the reverse tilt.
   for(const expected of boundaries.slice(1,4)){
    await p.locator('#film-next').click();

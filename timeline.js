@@ -1,12 +1,12 @@
 // Edit existing frames only: arrive, look up-left, retrace that tilt, then
 // match back to the settled forward view. Omit the upward-forward sweep.
-// The original opening hold and six trailing scene-one frames stay removed.
+// Keep the original opening hold removed; restore the six approach frames
+// that connect the settled foyer to the following shot without a forward jump.
 const range = (from, to) => Array.from({length: Math.abs(to-from)+1}, (_, i) => from+i*Math.sign(to-from));
 export const SOURCE_FRAMES = [
   ...range(62,152),
   ...range(151,118),
-  ...range(257,270),
-  ...range(277,896),
+  ...range(257,896),
 ];
 export const LAST_FRAME = SOURCE_FRAMES.length - 1;
 export function editedFrame(source) {
