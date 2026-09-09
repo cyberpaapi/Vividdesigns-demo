@@ -1,13 +1,21 @@
-// Non-destructive edit of the approved 897-frame master: remove the opening
-// hold (0..61) and six trailing frames of scene one (271..276).
-export const SOURCE_FRAMES = Array.from({ length: 897 }, (_, frame) => frame)
-  .filter(frame => frame >= 62 && (frame <= 270 || frame >= 277));
+// Edit existing frames only: arrive, look up-left, retrace that tilt, then
+// match back to the settled forward view. Omit the upward-forward sweep.
+// The original opening hold and six trailing scene-one frames stay removed.
+const range = (from, to) => Array.from({length: Math.abs(to-from)+1}, (_, i) => from+i*Math.sign(to-from));
+export const SOURCE_FRAMES = [
+  ...range(62,152),
+  ...range(151,118),
+  ...range(257,270),
+  ...range(277,896),
+];
 export const LAST_FRAME = SOURCE_FRAMES.length - 1;
 export function editedFrame(source) {
+  // For reused entrance frames, navigation refers to the first occurrence.
+  const exact = SOURCE_FRAMES.indexOf(source);
+  if (exact >= 0) return exact;
   if (source < 62) return 0;
-  if (source <= 270) return source - 62;
-  if (source < 277) return 208;
-  return source - 68;
+  if (source > 896) return LAST_FRAME;
+  return source < 257 ? SOURCE_FRAMES.indexOf(152) : SOURCE_FRAMES.indexOf(270);
 }
 // Navigation and one-swipe playback share the camera's approved pause points.
 export function nextPartBoundary(frame, direction = 1) {
@@ -17,7 +25,7 @@ export function nextPartBoundary(frame, direction = 1) {
 }
 // Anchors sit inside the settled camera pose, after incoming easing and before
 // the next move accelerates. Source-frame inspection: 118, 261 and 797.
-// Each merged section ends at the last pause in the user's requested group.
+// Keep broad section names, but stop swipe playback at every settled viewpoint.
 export const CHAPTERS = [
   { frame: 62, label: 'Arrival' },
   { frame: 118, label: 'Entrance' },
@@ -27,17 +35,15 @@ export const CHAPTERS = [
   { frame: 797, label: 'Landing & office' },
   { frame: 896, label: 'Exterior' },
 ].map(point => ({ ...point, frame: editedFrame(point.frame) }));
-export const PART_BOUNDARIES = CHAPTERS.map(point => point.frame);
 export const VIEWPOINTS = [
   { frame: 62, label: 'The arrival', nav: 'Arrival', dwell: 0 },
   { frame: 118, label: 'The entrance', nav: 'Entrance', dwell: 170 },
   { frame: 152, label: 'A view above', nav: 'Above', dwell: 140 },
-  { frame: 230, label: 'The chandelier', nav: 'Chandelier', dwell: 140 },
   { frame: 261, label: 'The foyer', nav: 'Foyer', dwell: 190 },
   { frame: 309, label: 'The living room', nav: 'Living', dwell: 160 },
-  { frame: 340, label: 'The kitchen', nav: 'Kitchen', dwell: 240 },
-  { frame: 370, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
-  // Do not split at the closed cabinet: keep approach and door opening together.
+  { frame: 340, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
+  { frame: 370, label: 'The dining and kitchen view', nav: 'Kitchen', dwell: 240 },
+  { frame: 423, label: 'At the kitchen door', nav: 'Kitchen door', dwell: 180 },
   { frame: 475, label: 'Beyond the kitchen', nav: 'Door reveal', dwell: 260 },
   { frame: 541, label: 'Around the kitchen', nav: 'Kitchen loop', dwell: 240 },
   { frame: 572, label: 'The return hall', nav: 'Hall', dwell: 150 },
@@ -45,8 +51,8 @@ export const VIEWPOINTS = [
   { frame: 711, label: 'The landing', nav: 'Landing', dwell: 180 },
   { frame: 797, label: 'The office', nav: 'Office', dwell: 320 },
   { frame: 896, label: 'The whole picture', nav: 'Exterior', dwell: 450 },
-].map(point => ({ ...point, frame: editedFrame(point.frame),
-  dwell: PART_BOUNDARIES.includes(editedFrame(point.frame)) ? point.dwell : 0 }));
+].map(point => ({ ...point, frame: editedFrame(point.frame) }));
+export const PART_BOUNDARIES = VIEWPOINTS.map(point => point.frame);
 
 export function createTimeline(pixelsPerFrame = 17) {
   const segments = [];

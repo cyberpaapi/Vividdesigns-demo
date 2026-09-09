@@ -27,12 +27,16 @@ for(const scale of [12,17]){
   });
 }
 test('the full-house final frame belongs to the exterior chapter',()=>assert.equal(chapterAtFrame(LAST_FRAME),6));
-test('both trims exclude only the intended source frames and start scrolling immediately',()=>{
-  assert.equal(SOURCE_FRAMES.length,829);
+test('entrance retraces the upward-left tilt and omits the upward-forward sweep',()=>{
+  assert.equal(SOURCE_FRAMES.length,759);
   assert.equal(SOURCE_FRAMES[0],62);
-  assert.equal(SOURCE_FRAMES[208],270);
-  assert.equal(SOURCE_FRAMES[209],277);
+  assert.deepEqual(SOURCE_FRAMES.slice(0,91),Array.from({length:91},(_,i)=>62+i));
+  assert.deepEqual(SOURCE_FRAMES.slice(91,125),Array.from({length:34},(_,i)=>151-i));
+  assert.equal(SOURCE_FRAMES[125],257);
+  assert.equal(SOURCE_FRAMES[138],270);
+  assert.equal(SOURCE_FRAMES[139],277);
   assert.equal(SOURCE_FRAMES.at(-1),896);
   assert.ok(frameAtScroll(17,createTimeline())>0);
-  assert.ok(SOURCE_FRAMES.every(f=>f>=62 && (f<=270 || f>=277)));
+  assert.ok(SOURCE_FRAMES.every(f=>f>=62 && (f<=152 || f>=257) && (f<=270 || f>=277)));
+  assert.deepEqual(SOURCE_FRAMES.slice(139),Array.from({length:620},(_,i)=>277+i));
 });
