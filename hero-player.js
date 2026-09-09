@@ -108,6 +108,7 @@ export function initHero({standalone=false,native=false,root=document,mediaBase=
   }
   function setLocked(value){locked=value;hero.classList.toggle('is-locked',value);debug.locked=value;}
   function release(){
+    if(native){playback=null;labels();window.scrollTo({top:scrollY+hero.getBoundingClientRect().bottom,behavior:reduced.matches?'instant':'smooth'});return;}
     if(standalone){playback=null;labels();return;}
     playback=null;setLocked(false);labels();
     const after=root.getElementById('after-film');
@@ -116,8 +117,10 @@ export function initHero({standalone=false,native=false,root=document,mediaBase=
   function step(direction){
     if(!ready||playback)return;
     if(direction>0&&frame>=LAST_FRAME-1){release();return;}
+    if(native&&direction<0&&frame<1){window.scrollTo({top:Math.max(0,scrollY+hero.getBoundingClientRect().top-innerHeight*.8),behavior:reduced.matches?'instant':'smooth'});return;}
     const end=nextPartBoundary(frame,direction);
     if(Math.abs(end-frame)<.5)return;
+    if(native){const rect=hero.getBoundingClientRect();if(rect.top<0||rect.bottom>innerHeight)hero.scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});}
     playback={end,direction};scrubTarget=end;last=0;labels();request();
   }
   function goTo(next){

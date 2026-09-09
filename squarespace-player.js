@@ -1,4 +1,4 @@
-import {initHero} from './hero-player.js?v=native-1';
+import {initHero} from './hero-player.js?v=native-2';
 
 // A native page element. Shadow DOM isolates player styles from Squarespace.
 const assets=new URL('./',import.meta.url);
