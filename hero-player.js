@@ -1,5 +1,5 @@
 import {FrameStore} from './frame-store.js';
-import {SOURCE_FRAMES, LAST_FRAME, CHAPTERS, nextPartBoundary} from './timeline.js?v=kitchen-flow-1';
+import {SOURCE_FRAMES, LAST_FRAME, CHAPTERS, nextPartBoundary} from './timeline.js?v=materials-20260909';
 
 // Keep the approved frame edit and chapter boundaries, but fetch packs on demand.
 // A visitor can start moving without waiting for the entire film to download.
@@ -94,7 +94,7 @@ export function initHero(){
     try{
       const mobile=matchMedia('(max-width:800px)').matches||navigator.connection?.saveData;
       const base=`./media/${mobile?'mobile':'hd'}`;
-      const response=await fetch(`${base}/manifest.json`);if(!response.ok)throw Error('Manifest unavailable');
+      const response=await fetch(`${base}/manifest.json?v=materials-20260909`);if(!response.ok)throw Error('Manifest unavailable');
       const manifest=await response.json();manifest.map=SOURCE_FRAMES.map(f=>manifest.map[f]);manifest.frames=SOURCE_FRAMES.length;
       store?.destroy();store=new StreamingFrames(manifest,base,{limit:mobile?24:20,concurrency:3,onAvailable:request});
       await store.ensure(0);ready=true;debug.ready=true;debug.quality=mobile?'mobile':'1080p';

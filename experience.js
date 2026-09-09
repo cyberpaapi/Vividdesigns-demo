@@ -1,4 +1,4 @@
-import {initHero} from './hero-player.js?v=kitchen-flow-1';
+import {initHero} from './hero-player.js?v=materials-20260909';
 const requested=new URLSearchParams(location.search).get('style');
 const style=['experimental','experiential'].includes(requested)?requested:'experimental';
 const experientialModule=style==='experiential'?await import('./experiential.js?v=3'):null;

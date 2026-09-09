@@ -20,10 +20,10 @@ for(const scale of [12,17]){
     assert.equal(frameAtScroll(timeline.length+100,timeline),LAST_FRAME);
   });
   test(`door animation remains continuous between closed and open stops at scale ${scale}`,()=>{
-    const closed=scrollAtFrame(editedFrame(423),timeline),open=scrollAtFrame(editedFrame(475),timeline);
+    const closed=scrollAtFrame(editedFrame(413),timeline),open=scrollAtFrame(editedFrame(475),timeline);
     const frames=new Set();
     for(let x=closed;x<=open;x+=1)frames.add(Math.round(frameAtScroll(x,timeline)));
-    for(let frame=editedFrame(423);frame<=editedFrame(475);frame++)assert.ok(frames.has(frame));
+    for(let frame=editedFrame(413);frame<=editedFrame(475);frame++)assert.ok(frames.has(frame));
   });
 }
 test('the full-house final frame belongs to the exterior chapter',()=>assert.equal(chapterAtFrame(LAST_FRAME),6));

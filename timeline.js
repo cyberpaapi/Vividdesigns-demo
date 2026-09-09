@@ -23,16 +23,15 @@ export function nextPartBoundary(frame, direction = 1) {
     ? (PART_BOUNDARIES.find(boundary => boundary > frame + 0.5) ?? LAST_FRAME)
     : ([...PART_BOUNDARIES].reverse().find(boundary => boundary < frame - 0.5) ?? 0);
 }
-// Anchors sit inside the settled camera pose, after incoming easing and before
-// the next move accelerates. Source-frame inspection: 118, 261 and 797.
-// Keep broad section names, but stop swipe playback at every settled viewpoint.
+// Anchors sit inside settled poses in the corrected Genjutsu footage.
+// Wine cellar continues directly to the closed kitchen door on the next swipe.
 export const CHAPTERS = [
   { frame: 62, label: 'Arrival' },
   { frame: 118, label: 'Entrance' },
   { frame: 261, label: 'Foyer' },
   { frame: 475, label: 'Living & kitchen' },
   { frame: 665, label: 'Kitchen to stairs' },
-  { frame: 797, label: 'Landing & office' },
+  { frame: 799, label: 'Landing & office' },
   { frame: 896, label: 'Exterior' },
 ].map(point => ({ ...point, frame: editedFrame(point.frame) }));
 export const VIEWPOINTS = [
@@ -40,15 +39,15 @@ export const VIEWPOINTS = [
   { frame: 118, label: 'The entrance', nav: 'Entrance', dwell: 170 },
   { frame: 152, label: 'A view above', nav: 'Above', dwell: 140 },
   { frame: 261, label: 'The foyer', nav: 'Foyer', dwell: 190 },
-  { frame: 309, label: 'The living room', nav: 'Living', dwell: 160 },
-  { frame: 340, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
-  { frame: 423, label: 'At the kitchen door', nav: 'Kitchen door', dwell: 180 },
+  { frame: 308, label: 'The living room', nav: 'Living', dwell: 160 },
+  { frame: 338, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
+  { frame: 413, label: 'At the kitchen door', nav: 'Kitchen door', dwell: 180 },
   { frame: 475, label: 'Beyond the kitchen', nav: 'Door reveal', dwell: 260 },
   { frame: 541, label: 'Around the kitchen', nav: 'Kitchen loop', dwell: 240 },
-  { frame: 572, label: 'The return hall', nav: 'Hall', dwell: 150 },
+  { frame: 578, label: 'The return hall', nav: 'Hall', dwell: 150 },
   { frame: 665, label: 'The staircase', nav: 'Stairs', dwell: 190 },
-  { frame: 711, label: 'The landing', nav: 'Landing', dwell: 180 },
-  { frame: 797, label: 'The office', nav: 'Office', dwell: 320 },
+  { frame: 712, label: 'The landing', nav: 'Landing', dwell: 180 },
+  { frame: 799, label: 'The office', nav: 'Office', dwell: 320 },
   { frame: 896, label: 'The whole picture', nav: 'Exterior', dwell: 450 },
 ].map(point => ({ ...point, frame: editedFrame(point.frame) }));
 export const PART_BOUNDARIES = VIEWPOINTS.map(point => point.frame);
