@@ -1,5 +1,5 @@
 import {FrameStore} from './frame-store.js';
-import {SOURCE_FRAMES, LAST_FRAME, CHAPTERS, nextPartBoundary} from './timeline.js?v=entrance-1';
+import {SOURCE_FRAMES, LAST_FRAME, CHAPTERS, nextPartBoundary} from './timeline.js?v=kitchen-flow-1';
 
 // Keep the approved frame edit and chapter boundaries, but fetch packs on demand.
 // A visitor can start moving without waiting for the entire film to download.

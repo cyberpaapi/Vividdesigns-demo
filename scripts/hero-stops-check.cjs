@@ -5,8 +5,8 @@ const base=process.env.CHECK_BASE||'http://127.0.0.1:4180/Vividdesigns-demo/';
  for(const mobile of [true,false]){
   const p=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:900},isMobile:mobile,hasTouch:mobile});
   const errors=[];p.on('pageerror',e=>errors.push(e.message));
-  await p.goto(base+'?style=experimental&v=entrance-1');await p.waitForFunction(()=>window.__heroDebug?.ready);
-  const boundaries=[0,56,90,129,171,202,232,285,337,403,434,527,573,659,758];
+  await p.goto(base+'?style=experimental&v=kitchen-flow-1');await p.waitForFunction(()=>window.__heroDebug?.ready);
+  const boundaries=[0,56,90,129,171,202,285,337,403,434,527,573,659,758];
   // Exercise the whole entrance in real time, including the reverse tilt.
   for(const expected of boundaries.slice(1,4)){
    await p.locator('#film-next').click();
@@ -28,7 +28,7 @@ const base=process.env.CHECK_BASE||'http://127.0.0.1:4180/Vividdesigns-demo/';
   }
   assert.deepEqual(errors,[]);assert.deepEqual(await p.evaluate(()=>__heroDebug.errors),[]);
   assert.equal(await p.locator('#film-chapters:visible').count(),0);
-  console.log(`${mobile?'Phone':'Desktop'}: entrance reverse edit and all 14 destinations pause correctly, forward and backward.`);
+  console.log(`${mobile?'Phone':'Desktop'}: entrance reverse edit and all 13 destinations pause correctly, forward and backward.`);
   await p.close();
  }
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});

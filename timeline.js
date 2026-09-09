@@ -42,7 +42,6 @@ export const VIEWPOINTS = [
   { frame: 261, label: 'The foyer', nav: 'Foyer', dwell: 190 },
   { frame: 309, label: 'The living room', nav: 'Living', dwell: 160 },
   { frame: 340, label: 'The wine cellar', nav: 'Wine cellar', dwell: 300 },
-  { frame: 370, label: 'The dining and kitchen view', nav: 'Kitchen', dwell: 240 },
   { frame: 423, label: 'At the kitchen door', nav: 'Kitchen door', dwell: 180 },
   { frame: 475, label: 'Beyond the kitchen', nav: 'Door reveal', dwell: 260 },
   { frame: 541, label: 'Around the kitchen', nav: 'Kitchen loop', dwell: 240 },

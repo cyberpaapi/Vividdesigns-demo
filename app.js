@@ -1,5 +1,5 @@
 import { FrameStore } from './frame-store.js';
-import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=entrance-1';
+import { SOURCE_FRAMES, LAST_FRAME, VIEWPOINTS, CHAPTERS, nextPartBoundary, createTimeline, frameAtScroll, scrollAtFrame, chapterAtFrame, viewpointAtFrame } from './timeline.js?v=kitchen-flow-1';
 
 const $ = id => document.getElementById(id);
 const canvas = $('film');
