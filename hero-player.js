@@ -28,11 +28,12 @@ class StreamingFrames extends FrameStore {
   }
 }
 
-export function initHero({standalone=false,native=false,root=document,mediaBase='./media'}={}){
+export function initHero({standalone=false,native=false,reverseScroll=false,root=document,mediaBase='./media'}={}){
   const events=new AbortController();let disposed=false;
   const listen=(target,type,handler,options={})=>target.addEventListener(type,handler,{...options,signal:events.signal});
   const hero=root.querySelector('.film-hero');
   const canvas=root.getElementById('hero-film');
+  if(reverseScroll)canvas.setAttribute('aria-label','Home walkthrough. Swipe down to advance to the next view; swipe up to go back.');
   const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let store,ready=false,frame=0,painted=-1,playback=null,scrubTarget=0,mode='steps',raf=0,last=0;
@@ -57,7 +58,7 @@ export function initHero({standalone=false,native=false,root=document,mediaBase=
     root.getElementById('film-room').textContent=CHAPTERS[index].label;
     root.getElementById('film-index').textContent=`${String(index+1).padStart(2,'0')} / 07`;
     nav.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current',i===index?'step':'false'));
-    root.getElementById('film-instruction').textContent=finished?(standalone?'Swipe down to look back.':'Continue scrolling to discover more'):playback?'Moving to the next viewpoint':mode==='scrub'?'Scroll to move through the home':'One swipe. One new perspective.';
+    root.getElementById('film-instruction').textContent=finished?(standalone?(reverseScroll?'Swipe up to look back.':'Swipe down to look back.'):'Continue scrolling to discover more'):playback?'Moving to the next viewpoint':mode==='scrub'?'Scroll to move through the home':'One swipe. One new perspective.';
     root.getElementById('film-next').setAttribute('aria-label',finished?(standalone?'Final viewpoint':'Continue to the next section'):'Play to next viewpoint');
     if(standalone)root.getElementById('film-next').disabled=finished||!ready;
     root.getElementById('film-prev').disabled=frame<1||!ready;
@@ -128,6 +129,7 @@ export function initHero({standalone=false,native=false,root=document,mediaBase=
     labels();request();
   }
   function gesture(delta){
+    if(reverseScroll)delta=-delta;
     if(mode==='steps'){step(delta>0?1:-1);return;}
     if(delta>0&&frame>=LAST_FRAME-1&&scrubTarget>=LAST_FRAME){release();return;}
     scrubTarget=Math.max(0,Math.min(LAST_FRAME,scrubTarget+delta*.5));request();
@@ -154,7 +156,7 @@ export function initHero({standalone=false,native=false,root=document,mediaBase=
   listen(hero,'touchend',event=>{
     const start=touch;touch=null;if(!start||start.blocked||!event.changedTouches.length||mode!=='steps')return;
     const dx=event.changedTouches[0].clientX-start.x,dy=start.y-event.changedTouches[0].clientY;
-    if(Math.abs(dy)>35&&Math.abs(dy)>Math.abs(dx)*1.2)step(dy>0?1:-1);
+    if(Math.abs(dy)>35&&Math.abs(dy)>Math.abs(dx)*1.2)gesture(dy);
   },{passive:true});
   listen(hero,'touchcancel',()=>{touch=null});
   let oldY=scrollY;
