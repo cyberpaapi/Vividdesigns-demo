@@ -41,7 +41,7 @@ class VividWalkthrough extends HTMLElement {
         @media(max-width:480px){.film-controls{gap:12px;padding:10px 12px}.film-hint{font-size:11px}}
       `;
       root.replaceChildren(style,main);
-      this.player=initHero({standalone:true,native:true,reverseScroll:true,root,mediaBase:new URL('media',assets).href});
+      this.player=initHero({standalone:true,native:true,reverseScroll:false,root,mediaBase:new URL('media',assets).href});
     }).catch(()=>{
       if(!this.isConnected||this.token!==token)return;
       root.innerHTML='<p role="status">The walkthrough could not load.</p><button type="button">Retry</button>';
