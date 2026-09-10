@@ -1,4 +1,4 @@
-import {initHero} from './hero-player.js?v=native-reverse-4';
+import {initHero} from './hero-player.js?v=native-wheel-6';
 
 // A native page element. Shadow DOM isolates player styles from Squarespace.
 const assets=new URL('./',import.meta.url);
@@ -41,7 +41,7 @@ class VividWalkthrough extends HTMLElement {
         @media(max-width:480px){.film-controls{gap:12px;padding:10px 12px}.film-hint{font-size:11px}}
       `;
       root.replaceChildren(style,main);
-      this.player=initHero({standalone:true,native:true,reverseScroll:false,root,mediaBase:new URL('media',assets).href});
+      this.player=initHero({standalone:true,native:true,reverseScroll:false,reverseWheel:true,root,mediaBase:new URL('media',assets).href});
     }).catch(()=>{
       if(!this.isConnected||this.token!==token)return;
       root.innerHTML='<p role="status">The walkthrough could not load.</p><button type="button">Retry</button>';

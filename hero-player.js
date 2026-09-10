@@ -28,7 +28,7 @@ class StreamingFrames extends FrameStore {
   }
 }
 
-export function initHero({standalone=false,native=false,reverseScroll=false,root=document,mediaBase='./media'}={}){
+export function initHero({standalone=false,native=false,reverseScroll=false,reverseWheel=false,root=document,mediaBase='./media'}={}){
   const events=new AbortController();let disposed=false;
   const listen=(target,type,handler,options={})=>target.addEventListener(type,handler,{...options,signal:events.signal});
   const hero=root.querySelector('.film-hero');
@@ -140,7 +140,7 @@ export function initHero({standalone=false,native=false,reverseScroll=false,root
     event.preventDefault();
     const now=performance.now();if(now-wheelLast>280){wheelUsed=false;wheelTotal=0;}wheelLast=now;
     if(playback){wheelUsed=true;return;}
-    const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?innerHeight:1);
+    const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?innerHeight:1)*(reverseWheel?-1:1);
     if(mode==='scrub'){gesture(delta);return;}
     if(wheelUsed)return;wheelTotal+=delta;
     if(Math.abs(wheelTotal)>32){wheelUsed=true;gesture(wheelTotal);}
